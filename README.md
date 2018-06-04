@@ -1,4 +1,7 @@
 # Image-to-Image Translation (Chainer)
+
+<b>This repogitory is fork of https://github.com/wuhuikai/chainer-pix2pix for specific use.</b>
+
 Chainer implementation for [Image-to-Image Translation Using Conditional Adversarial Networks](https://phillipi.github.io/pix2pix/), it's transplanted from [pix2pix](https://github.com/phillipi/pix2pix).
 ## Result
 ![](readme_images/result_3.png)
