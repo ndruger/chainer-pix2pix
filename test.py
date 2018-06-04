@@ -48,13 +48,16 @@ def main():
         img_path = img_path.strip().split(' ')[-1]
         img = cv2.imread(img_path, cv2.IMREAD_COLOR)[:, :, ::-1]
         h, w, _ = img.shape
-        img = np.asarray(Image.fromarray(img).resize((args.load_size, args.load_size), resample=Image.NEAREST), dtype=np.float32)
-        img = np.transpose(img, (2, 0, 1))
+        img_a = np.asarray(img[:,256:], dtype=np.float32)
+        img_a = np.transpose(img_a, (2, 0, 1))
 
-        A = data_process([img], device=args.gpu, volatile='on')
-        B = np.squeeze(output2img(G(A, test=True, dropout=False)))
+        A = data_process([img_a], device=args.gpu)
+        B = np.squeeze(output2img(G(A)))
         
-        Image.fromarray(B).resize((w, h), resample=Image.BILINEAR).save(os.path.join(args.out, os.path.basename(img_path).replace('gtFine_labelIds', 'leftImg8bit')))
+        joined = np.hstack((img, B))
+        
+        save_path = os.path.join(args.out, os.path.basename(img_path).replace('gtFine_labelIds', 'leftImg8bit'))
+        Image.fromarray(joined).save(save_path)
 
 if __name__ == '__main__':
     main()

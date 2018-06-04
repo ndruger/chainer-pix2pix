@@ -41,22 +41,23 @@ class Generator(chainer.Chain):
             b7_d=L.BatchNormalization(feature_map_nc)
         )
 
-    def __call__(self, x, test=False, dropout=True):
+    def __call__(self, x):
         e1 = self.c1(x)
-        e2 = self.b2(self.c2(F.leaky_relu(e1)), test=test)
-        e3 = self.b3(self.c3(F.leaky_relu(e2)), test=test)
-        e4 = self.b4(self.c4(F.leaky_relu(e3)), test=test)
-        e5 = self.b5(self.c5(F.leaky_relu(e4)), test=test)
-        e6 = self.b6(self.c6(F.leaky_relu(e5)), test=test)
-        e7 = self.b7(self.c7(F.leaky_relu(e6)), test=test)
-        e8 = self.b8(self.c8(F.leaky_relu(e7)), test=test)
-        d1 = F.concat((F.dropout(self.b1_d(self.dc1(F.relu(e8)), test=test), train=dropout), e7))
-        d2 = F.concat((F.dropout(self.b2_d(self.dc2(F.relu(d1)), test=test), train=dropout), e6))
-        d3 = F.concat((F.dropout(self.b3_d(self.dc3(F.relu(d2)), test=test), train=dropout), e5))
-        d4 = F.concat((self.b4_d(self.dc4(F.relu(d3)), test=test), e4))
-        d5 = F.concat((self.b5_d(self.dc5(F.relu(d4)), test=test), e3))
-        d6 = F.concat((self.b6_d(self.dc6(F.relu(d5)), test=test), e2))
-        d7 = F.concat((self.b7_d(self.dc7(F.relu(d6)), test=test), e1))
+        e2 = self.b2(self.c2(F.leaky_relu(e1)))
+        e3 = self.b3(self.c3(F.leaky_relu(e2)))
+        e4 = self.b4(self.c4(F.leaky_relu(e3)))
+        e5 = self.b5(self.c5(F.leaky_relu(e4)))
+        e6 = self.b6(self.c6(F.leaky_relu(e5)))
+        e7 = self.b7(self.c7(F.leaky_relu(e6)))
+        e8 = self.c8(F.leaky_relu(e7))
+#        e8 = self.b8(self.c8(F.leaky_relu(e7)))
+        d1 = F.concat((F.dropout(self.b1_d(self.dc1(F.relu(e8)))), e7))
+        d2 = F.concat((F.dropout(self.b2_d(self.dc2(F.relu(d1)))), e6))
+        d3 = F.concat((F.dropout(self.b3_d(self.dc3(F.relu(d2)))), e5))
+        d4 = F.concat((self.b4_d(self.dc4(F.relu(d3))), e4))
+        d5 = F.concat((self.b5_d(self.dc5(F.relu(d4))), e3))
+        d6 = F.concat((self.b6_d(self.dc6(F.relu(d5))), e2))
+        d7 = F.concat((self.b7_d(self.dc7(F.relu(d6))), e1))
         y = F.tanh(self.dc8(F.relu(d7)))
         
         return y
@@ -82,13 +83,13 @@ class Discriminator(chainer.Chain):
 
         super(Discriminator, self).__init__(**layers)
 
-    def __call__(self, x, test=False):
+    def __call__(self, x):
         h = F.leaky_relu(self.c0(x))
 
         for idx in range(1, self.n_layers):
-            h = F.leaky_relu(self['b{}'.format(idx)](self['c{}'.format(idx)](h), test=test))
+            h = F.leaky_relu(self['b{}'.format(idx)](self['c{}'.format(idx)](h)))
 
-        h = F.leaky_relu(self['b{}'.format(self.n_layers)](self['c{}'.format(self.n_layers)](h), test=test))
+        h = F.leaky_relu(self['b{}'.format(self.n_layers)](self['c{}'.format(self.n_layers)](h)))
         h = F.sigmoid(self.c(h))
 
         return h

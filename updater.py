@@ -42,12 +42,12 @@ class Pix2pixUpdater(chainer.training.StandardUpdater):
 
         real_AB = F.concat((A, B))
 
-        fake_B = self.G(A, test=False)
+        fake_B = self.G(A)
 
         fake_AB = F.concat((A, fake_B))
 
-        real_D = self.D(real_AB, test=False)
-        fake_D = self.D(fake_AB, test=False)
+        real_D = self.D(real_AB)
+        fake_D = self.D(fake_AB)
         
         optimizer_G = self.get_optimizer('main')
         optimizer_D = self.get_optimizer('D')

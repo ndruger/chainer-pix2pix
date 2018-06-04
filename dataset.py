@@ -24,9 +24,9 @@ def _read_image_as_array(path, dtype, load_size, crop_size, flip):
     A = _resize(A, load_size, Image.BILINEAR, dtype)
     B = _resize(B, load_size, Image.NEAREST, dtype)
 
-    sx, sy = numpy.random.randint(0, load_size-crop_size, 2)
-    A = _crop(A, sx, sy, crop_size)
-    B = _crop(B, sx, sy, crop_size)
+#    sx, sy = numpy.random.randint(0, load_size-crop_size, 2)
+#    A = _crop(A, sx, sy, crop_size)
+#    B = _crop(B, sx, sy, crop_size)
     
     if flip and numpy.random.rand() > 0.5:
         A = numpy.fliplr(A)
