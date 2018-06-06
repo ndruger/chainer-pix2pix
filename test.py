@@ -60,4 +60,5 @@ def main():
         Image.fromarray(joined).save(save_path)
 
 if __name__ == '__main__':
+    # with chainer.using_config('train', False):
     main()
