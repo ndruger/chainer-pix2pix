@@ -17,7 +17,7 @@ def output2img(y):
 def display_image(G, valset, dst, device):
     @chainer.training.make_extension()
     def make_image(trainer):
-        with chainer.using_config('train', False):
+#        with chainer.using_config('train', False): # makes error on "e8 = self.b8(self.c8(F.leaky_relu(e7)))" with gpu. TODO: check cause and fix
             preview_dir = '{}/preview'.format(dst)
             if not os.path.exists(preview_dir):
                 os.makedirs(preview_dir)

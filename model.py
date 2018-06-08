@@ -49,8 +49,8 @@ class Generator(chainer.Chain):
         e5 = self.b5(self.c5(F.leaky_relu(e4)))
         e6 = self.b6(self.c6(F.leaky_relu(e5)))
         e7 = self.b7(self.c7(F.leaky_relu(e6)))
-        e8 = self.c8(F.leaky_relu(e7))
-        # e8 = self.b8(self.c8(F.leaky_relu(e7))) # makes error on w"ith chainer.using_config('train', False):" with gpu. TODO: check cause and fix
+        # e8 = self.c8(F.leaky_relu(e7))
+        e8 = self.b8(self.c8(F.leaky_relu(e7))) # makes error on with chainer.using_config('train', False):" with gpu. TODO: check cause and fix
         d1 = F.concat((F.dropout(self.b1_d(self.dc1(F.relu(e8)))), e7))
         d2 = F.concat((F.dropout(self.b2_d(self.dc2(F.relu(d1)))), e6))
         d3 = F.concat((F.dropout(self.b3_d(self.dc3(F.relu(d2)))), e5))
