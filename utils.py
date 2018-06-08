@@ -18,19 +18,19 @@ def display_image(G, valset, dst, device):
     @chainer.training.make_extension()
     def make_image(trainer):
 #        with chainer.using_config('train', False): # makes error on "e8 = self.b8(self.c8(F.leaky_relu(e7)))" with gpu. TODO: check cause and fix
-            preview_dir = '{}/preview'.format(dst)
-            if not os.path.exists(preview_dir):
-                os.makedirs(preview_dir)
+        preview_dir = '{}/preview'.format(dst)
+        if not os.path.exists(preview_dir):
+            os.makedirs(preview_dir)
 
-            idx = np.random.randint(0, len(valset))
+        idx = np.random.randint(0, len(valset))
 
-            A, _ = valset.get_example(idx)
-            name = valset.get_name(idx)
-            fake_B = G(data_process([A], device=device))
-            fake_B = np.squeeze(output2img(fake_B))
+        A, _ = valset.get_example(idx)
+        name = valset.get_name(idx)
+        fake_B = G(data_process([A], device=device))
+        fake_B = np.squeeze(output2img(fake_B))
 
-            name = os.path.splitext(name)[0]
-            preview_path = preview_dir + '/{}_iter_{}.png'.format(name, trainer.updater.iteration)
-            Image.fromarray(fake_B).save(preview_path)
+        name = os.path.splitext(name)[0]
+        preview_path = preview_dir + '/{}_iter_{}.png'.format(name, trainer.updater.iteration)
+        Image.fromarray(fake_B).save(preview_path)
 
     return make_image
